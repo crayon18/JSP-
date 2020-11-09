@@ -7,7 +7,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-<h3>ȭ�鿡 �������� ��� �Ͻÿ�</h3>
+<h3>구구단을 화면에 출력하세요</h3>
 <%
 
 for(int i = 2; i < 10; i++){
