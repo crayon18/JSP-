@@ -7,6 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
+
+
 <center>
 	<h2>회원 가입</h2>
 	<form action="RequestJoinProc.jsp" method="post">
@@ -31,8 +33,6 @@
 	<td width="150" align="center">전화번호</td>
 	<td width="350" align="center"><input type="tel" name="tel" size="40"></td>
 	</tr>
-	
-	
 	
 	<tr height="50">
 	<td width="150" align="center">당신의 관심분야</td>
@@ -88,9 +88,10 @@
 		</td>
 	</tr>
 	
-	
 	</table>
 	</form>
 	</center>
+	
+	
 </body>
 </html>
