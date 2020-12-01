@@ -38,7 +38,8 @@
 		MemberBean bean = vac.get(i); //백터에 담긴 빈클래스를 하나씩 추출
 	%>
 	<tr height="50">
-		<td align="center" width="150"><%= bean.getId() %></td>
+		<td align="center" width="150">
+		<a href="MemberInfo.jsp?id=<%=bean.getId()%>"><%= bean.getId() %></a></td>
 		<td align="center" width="250"><%= bean.getEmail() %></td>
 		<td align="center" width="200"><%= bean.getTel() %></td>
 		<td align="center" width="200"><%= bean.getHobby() %></td>

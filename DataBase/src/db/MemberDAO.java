@@ -132,6 +132,45 @@ public class MemberDAO {
 	
 	
 	
+	//한 사람의 대한 정보를 리턴하는 메소드 작성
+	
+	public MemberBean oneSelectMember(String id) {
+		//한사람의 대한 정보 만 리턴 하기에 빈클래스 객체 생성
+		MemberBean bean = new MemberBean();
+		
+		try {
+			//커넥션 연결
+			getCon();
+			//쿼리준비
+			String sql="select * from table1 where id=?";
+			pstmt = con.prepareStatement(sql);
+			//?의 값을 맵핑
+			pstmt.setString(1, id);
+			//쿼리실행
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {//레코드가 있다면
+				bean.setId(rs.getString(1));
+				bean.setPass1(rs.getString(2));
+				bean.setEmail(rs.getString(3));
+				bean.setTel(rs.getString(4));
+				bean.setHobby(rs.getString(5));
+				bean.setJob(rs.getString(6));
+				bean.setAge(rs.getString(7));
+				bean.setInfo(rs.getString(8));
+			}
+			
+			//자원반납
+			con.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		//리턴
+		return bean;
+	}
+	
 	
 	
 	
