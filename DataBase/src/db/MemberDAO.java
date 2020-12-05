@@ -6,14 +6,24 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.Vector;
 
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
+
+
+
+
+
+
+
 //oracle 데이터 베이스에 연결하고 select, insert, update, delete 작업을 실행해주는 클래스 입니다.
 public class MemberDAO {
 
 	  		//오라클에 접속하는 소스를 작성
 	
-			String id ="system";
+			/*String id ="system";
 			String pass = "123456";
-			String url = "jdbc:oracle:thin:@localhost:1521:XE";  //접속url
+			String url = "jdbc:oracle:thin:@localhost:1521:XE";  //접속url*/
 	
 			Connection con; //데이터 베이스에 접근할수 있도록 설정
 			PreparedStatement pstmt; //데이터 베이스 에서 쿼리를 실행 시켜 주는 객체
@@ -25,7 +35,26 @@ public class MemberDAO {
 			
 	//데이터 베이스에 접근할 수 있도록 도와주는 메소드
 	public void getCon() {
+	
+		//커넥션풀을 이용하여 데이터 베이스에 접근
 		try {
+			//외부에서 데이터를 읽어드려야 하기에
+			Context initctx = new InitialContext();
+			//톰켓 서버에 정보를 담아 놓은 곳으로 이동
+			Context envctx = (Context) initctx.lookup("java:comp/env");
+			//데이터 소스 객체를 선언
+			DataSource ds = (DataSource) envctx.lookup("jdbc/pool");
+			//데이터 소스를 기준으로 커넥션을 연결해주시오
+			con = ds.getConnection();
+			
+		} catch (Exception e) {
+			
+		}
+		
+		
+		
+		
+		/*try {
 			
 			
 			//1.해당 데이터 베이스를 사용한다고 선언(클래스를 등록 = oracle 용을 사용)
@@ -36,7 +65,7 @@ public class MemberDAO {
 			
 		} catch (Exception e) {
 		
-		}
+		}*/
 		
 	}
 	
@@ -171,6 +200,77 @@ public class MemberDAO {
 		return bean;
 	}
 	
+	//한 회원의 패스워드값을 리턴한는 매소드 작성
+	public String getPass(String id) {
+		//스트링으로 리턴을 해야하기 때문에 스트링 변수 선언
+		String pass ="";
+		try {
+			
+			//커넥션 연결
+			getCon();
+			//쿼리준비
+			String sql="select PASS from table1 where id=?";
+			//쿼리를 실행시켜 주는 객체 선언
+			pstmt = con.prepareStatement(sql);
+			//?의 값을 맵핑
+			pstmt.setString(1, id);
+			//쿼리실행
+			rs = pstmt.executeQuery();
+			
+			if(rs.next()) {
+				pass= rs.getString(1); //패스워드값이 저장된 컬럼인덱스
+			}
+			//자원반납
+			con.close();
+			
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return pass;
+	}
+	
+	//한 회원의 정보를 수정하는 메소드
+	public void updateMember(MemberBean bean) {
+		
+		getCon();
+		
+		try {
+			String sql = "update table1 set email=?,tel=? where id=?";
+			pstmt = con.prepareStatement(sql);
+			//?의 값을 맵핑
+			pstmt.setString(1, bean.getEmail());
+			pstmt.setString(2, bean.getTel());
+			pstmt.setString(3, bean.getId());
+			
+			pstmt.executeUpdate();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	//한회원을 삭제하는 메소드 작성
+	public void deleteMember(String id) {
+		
+		getCon();
+		try {
+			String sql = "delete from table1 where id=?";
+			pstmt = con.prepareStatement(sql);
+
+			//?의 값을 맵핑
+			pstmt.setString(1, id);
+			
+			pstmt.executeUpdate();
+			
+			con.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 	
 	
 	
